@@ -1,9 +1,10 @@
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
+from utils.graph_maker import display_select_grap
 
 def display_grap_analysis(data):
-    st.header("Análisis de Features")
+    st.header("Análisis de informacion")
 
     # Crear barra lateral para seleccionar el tipo de gráfico y filtrar datos
     chart_type = st.sidebar.selectbox(
@@ -34,49 +35,4 @@ def display_grap_analysis(data):
         & (data["Experience_Level"].isin(expe))
     ]
 
-    # Crear dos columnas
-    col1, col2 = st.columns(2)
-
-    # Mostrar el gráfico seleccionado en la primera columna
-
-    if chart_type == "Dispersión":
-        with col1:
-            st.header("Calorias quemadas vs Porcentage de Grasa:")
-            fig, ax = plt.subplots()
-            sns.scatterplot(
-                data=filtered_df, x="Fat_Percentage", y="Calories_Burned", ax=ax, color="blue"
-            )
-            st.pyplot(fig)
-        with col2:
-            st.header("Duracion del Entrenamiento vs Porcentage de Grasa:")
-            fig, ax = plt.subplots()
-            sns.scatterplot(
-                data=filtered_df, x="Fat_Percentage", y="Session_Duration (hours)", ax=ax, color="blue"
-            )
-            st.pyplot(fig)
-    elif chart_type == "Barras":
-        st.header("Promedio de Calorias quemadas por ejercicio:")
-        fig, ax = plt.subplots(figsize=(10, 5))
-        sns.barplot(
-            data=filtered_df,
-            x="Workout_Type",
-            y="Calories_Burned",
-            ax=ax,
-            ci=None,
-            color="lightblue",
-        )
-        st.pyplot(fig)
-    elif chart_type == "Histograma":
-        st.header("Indice de Masa Corporal:")
-        fig, ax = plt.subplots(figsize=(10, 5))
-        sns.histplot(
-            data=filtered_df, x="BMI", bins=10, ax=ax, color="skyblue"
-        )
-        st.pyplot(fig)
-    elif chart_type == "Linea":
-        st.header("Calorias Quemadas por Genero:")
-        fig, ax = plt.subplots(figsize=(10, 5))
-        sns.lineplot(
-            data=filtered_df, x="Age", y="Calories_Burned", ax=ax, color="lightgreen", hue="Gender"
-        )
-        st.pyplot(fig)
+    display_select_grap(chart_type, filtered_df )
